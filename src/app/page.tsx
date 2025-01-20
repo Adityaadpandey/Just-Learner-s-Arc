@@ -1,210 +1,238 @@
 "use client"
 
-import FormComponent from "@/components/form"
-import { motion, useScroll, useTransform } from "framer-motion"
-import { useRef, useState } from "react"
+import FormComponent from "@/components/form";
+import { AnimatePresence, motion } from "framer-motion";
+import { Play } from 'lucide-react';
+import { useRef, useState } from "react";
+
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const introRef = useRef<HTMLDivElement>(null)
-  const [isVideoHovered, setIsVideoHovered] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [showOverlay, setShowOverlay] = useState(false)
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false)
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"]
-  })
+  const handleVideoPlay = () => {
+    setIsVideoPlaying(true)
+  }
 
-  const introScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.95])
-  const introOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
-
-  // Enhanced floating elements
-  const floatingElements = Array.from({ length: 3 }).map((_, i) => (
-    <motion.div
-      key={i}
-      className={`absolute w-64 h-64 bg-gradient-to-r
-        ${i === 0 ? 'from-purple-500/10 to-blue-500/10' :
-          i === 1 ? 'from-blue-500/10 to-purple-500/10' :
-            'from-purple-500/10 via-blue-500/10 to-purple-500/10'}
-        rounded-full blur-3xl`}
-      animate={{
-        x: [0, Math.random() * 100 - 50],
-        y: [0, Math.random() * 100 - 50],
-        scale: [1, 1.2, 1],
-        rotate: [0, 360],
-      }}
-      transition={{
-        duration: 20 + i * 5,
-        repeat: Infinity,
-        repeatType: "reverse",
-        ease: "linear",
-      }}
-      style={{
-        left: `${20 + i * 30}%`,
-        top: `${20 + i * 20}%`,
-      }}
-    />
-  ))
+  const handleVideoPause = () => {
+    setIsVideoPlaying(false)
+  }
 
   return (
-    <div ref={containerRef} className="relative bg-black overflow-hidden">
-      {/* Enhanced Background Effects */}
-      <div className="fixed inset-0 z-0">
-        {/* <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/20 via-black to-black" /> */}
-        <div className="absolute inset-0 bg-grid animate-grid-fade opacity-5" />
-        {floatingElements}
-      </div>
+    <>
+      <div ref={containerRef} className="relative bg-black">
+        {/* Dynamic background */}
+        <div className="fixed inset-0 z-0">
+        </div>
 
-      {/* Enhanced Hero Section */}
-      <motion.section
-        ref={introRef}
-        style={{ scale: introScale, opacity: introOpacity }}
-        className="min-h-screen flex flex-col items-center justify-center relative px-4"
-      >
-        {/* <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
-          <motion.div
-            animate={{
-              scale: [1, 1.2, 1],
-              rotate: [0, 360],
-            }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-            className="w-[800px] h-[800px] rounded-full bg-gradient-to-r from-purple-500/5 to-blue-500/5 blur-3xl"
-          />
-        </div> */}
-
-        <motion.div
+        {/* Top Video Section */}
+        <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="text-center relative z-10 mb-16"
+          transition={{ duration: 0.8 }}
+          className="min-h-screen flex flex-col items-center justify-center relative px-4 mt-32"
         >
+          <div className="text-center mb-12 relative z-10">
+            <motion.h1
+              className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+            >
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-blue-500 animate-gradient-xy">
+                Welcome to the Future
+              </span>
+            </motion.h1>
+
+            <motion.p
+              className="mt-6 text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+            >
+              Join us in building something extraordinary
+            </motion.p>
+          </div>
+
+          {/* Main Video Preview */}
           <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="w-40 h-40 mx-auto mb-8 relative"
-          >
-
-          </motion.div>
-
-          <motion.h1
-            className="text-6xl  font-bold tracking-tight"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="w-full max-w-4xl mx-auto relative z-10"
           >
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-blue-500 animate-gradient-xy">
-              Welcome to the Learner&apos;s Arc
-            </span>
-          </motion.h1>
+            <div className="relative rounded-xl overflow-hidden shadow-2xl group">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 opacity-0
+                group-hover:opacity-100 transition-opacity duration-300 z-10" />
 
-          <motion.p
-            className="mt-6 text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-          >
-            Join us in Making you extraordinary
-          </motion.p>
-        </motion.div>
-
-        {/* Enhanced Video Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="w-full max-w-5xl mx-auto relative z-10 px-4"
-          onHoverStart={() => setIsVideoHovered(true)}
-          onHoverEnd={() => setIsVideoHovered(false)}
-        >
-          <motion.div
-            className="relative rounded-2xl overflow-hidden shadow-2xl"
-            animate={{
-              boxShadow: isVideoHovered
-                ? "0 0 50px -12px rgba(124, 58, 237, 0.5)"
-                : "0 0 30px -12px rgba(0, 0, 0, 0.5)"
-            }}
-          >
-            {/* Premium Video Effects */}
-            <motion.div
-              className="absolute inset-0 z-0"
-              animate={{
-                background: isVideoHovered
-                  ? "radial-gradient(circle at center, rgba(124, 58, 237, 0.3) 0%, transparent 70%)"
-                  : "radial-gradient(circle at center, rgba(124, 58, 237, 0.1) 0%, transparent 70%)"
-              }}
-              transition={{ duration: 0.5 }}
-            />
-
-            <div className="aspect-video relative z-10 group">
               <video
-                className="w-full h-full object-cover transform transition-all duration-700 scale-105"
+                className="w-full aspect-video object-cover transform transition-transform duration-700 scale-105"
                 autoPlay
                 loop
                 muted
                 playsInline
-                controls={isVideoHovered}
               >
                 <source src="https://cloudinary-marketing-res.cloudinary.com/video/upload/f_auto,q_auto,w_900/v1691615364/smart_tagging_3-2.mp4" type="video/mp4" />
               </video>
 
-              {/* Enhanced Video Overlay */}
-              <motion.div
-                className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-black/60 via-black/20 to-transparent"
-                animate={{
-                  opacity: isVideoHovered ? 0 : 1,
-                }}
-                transition={{ duration: 0.5 }}
-              >
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
                 <motion.div
-                  className="flex flex-col items-center"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center"
+                >
+                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </motion.div>
+              </div>
+            </div>
+          </motion.div>
+        </motion.section>
+
+        {/* Watch Video Button */}
+        <motion.div
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.5 }}
+          className="fixed right-8 top-1/2 -translate-y-1/2 z-50"
+          whileHover={{ scale: 1.05 }}
+        >
+          <motion.button
+            onClick={() => setShowOverlay(true)}
+            className="group relative flex items-center gap-2 overflow-hidden rounded-full px-6 py-3 bg-black/50 backdrop-blur-sm border border-white/10 hover:bg-black/70 transition-all duration-300"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            aria-label="Play video"
+          >
+            {/* Gradient overlay effect */}
+            <div
+              className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-blue-500/20 to-purple-500/20 opacity-0
+        group-hover:opacity-100 transition-opacity duration-300"
+            />
+
+            {/* Animated play icon */}
+            <motion.div
+              animate={{
+                scale: [1, 1.1, 1],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="relative"
+            >
+              <Play
+                className="w-5 h-5 text-white group-hover:text-purple-400 transition-colors duration-300"
+              />
+            </motion.div>
+
+            {/* Button text */}
+            <span className="relative font-medium text-white group-hover:text-purple-400 transition-colors duration-300">
+              Watch Video
+            </span>
+          </motion.button>
+        </motion.div>
+
+        {/* Form Section with Enhanced Spacing */}
+        <motion.section
+          className="relative z-10 pt-20"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <FormComponent />
+        </motion.section>
+      </div>
+
+      {/* Video Overlay */}
+      <AnimatePresence>
+        {showOverlay && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50"
+              onClick={() => setShowOverlay(false)}
+            />
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="fixed inset-4 md:inset-10 z-50 flex flex-col"
+            >
+              <div className="relative flex-1 rounded-xl overflow-hidden bg-black/80 shadow-2xl border border-white/10">
+                <motion.button
+                  onClick={() => setShowOverlay(false)}
+                  className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/50 backdrop-blur-sm
+                    hover:bg-black/70 transition-all duration-300 group"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <svg
+                    className="w-6 h-6 text-white/70 group-hover:text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </motion.button>
+
+                <div className="absolute inset-0">
+                  <video
+                    ref={videoRef}
+                    className="w-full h-full object-cover"
+                    autoPlay
+                    controls
+                    onPlay={handleVideoPlay}
+                    onPause={handleVideoPause}
+                    src="https://media.istockphoto.com/id/1436848913/video/modern-megapolis-isometric-map-video-concept.mp4?s=mp4-640x640-is&amp;k=20&amp;c=DEVj9Yzy1Yg5pjj1R-RJ3Ixqsv3A6PHTT6jaTNpfmsE="
+                  />
+                </div>
+
+                <motion.div
+                  className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/80 to-transparent"
                   animate={{
-                    scale: isVideoHovered ? 0.8 : 1,
+                    opacity: isVideoPlaying ? 0 : 1,
+                    y: isVideoPlaying ? 20 : 0,
                   }}
                   transition={{ duration: 0.3 }}
                 >
-                  <motion.div
-                    className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center mb-4 border border-white/20"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <motion.svg
-                      className="w-10 h-10 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                      animate={{ scale: [1, 1.1, 1] }}
-                      transition={{ duration: 2, repeat: Infinity }}
+                  <div className="p-8">
+                    <motion.div
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.3 }}
+                      className="max-w-3xl mx-auto space-y-4"
                     >
-                      <path d="M8 5v14l11-7z" />
-                    </motion.svg>
-                  </motion.div>
-                  <span className="text-white text-xl font-medium tracking-wide">
-                    Watch our story
-                  </span>
+                      <motion.div
+                        className="w-20 h-1 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"
+                        animate={{ scaleX: [1, 1.5, 1] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      />
+                      <h2 className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-blue-500">
+                        Discover Our Journey
+                      </h2>
+                      <p className="text-gray-300 text-lg leading-relaxed">
+                        Experience the future of technology through our innovative solutions. Join us in building
+                        something extraordinary and be part of the next generation of technological advancement.
+                      </p>
+                    </motion.div>
+                  </div>
                 </motion.div>
-              </motion.div>
-            </div>
-
-            {/* Enhanced Border Effect */}
-            <motion.div
-              className="absolute -inset-[1px] rounded-2xl z-0"
-              initial={{ opacity: 0 }}
-              animate={{
-                opacity: isVideoHovered ? 1 : 0,
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl opacity-50 blur-sm animate-pulse-slow" />
+              </div>
             </motion.div>
-          </motion.div>
-        </motion.div>
-      </motion.section>
-
-      {/* Enhanced Form Section */}
-      <section className="relative z-10">
-        <FormComponent />
-      </section>
-    </div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   )
 }
