@@ -148,7 +148,7 @@ export default function Home() {
         </motion.section>
       </div>
 
-      {/* Video Overlay */}
+      {/* Video Overlay working with the Watch Video Button */}
       <AnimatePresence>
         {showOverlay && (
           <>
