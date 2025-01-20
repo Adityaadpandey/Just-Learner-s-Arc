@@ -95,7 +95,7 @@ const FormComponent = () => {
                 <Card className="relative bg-black/80 border-white/10 shadow-2xl overflow-hidden">
                     {/* Background Effects */}
                     <div className="absolute inset-0 z-0">
-                        <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-black/50 to-black/80" />
+                        <div className="absolute inset-0 bg-gradient-to-b from-purple-900/15 via-black/50 to-black/80" />
                         <motion.div
                             className="absolute inset-0"
                             animate={{
@@ -105,7 +105,7 @@ const FormComponent = () => {
                                     "radial-gradient(600px circle at 0% 0%, rgba(124, 58, 237, 0.1), transparent 40%)",
                                 ],
                             }}
-                            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                            transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
                         />
                     </div>
 
@@ -213,8 +213,8 @@ const FormComponent = () => {
                                     <Button
                                         type="submit"
                                         disabled={isSubmitting}
-                                        className={`w-full h-14 bg-gradient-to-r from-purple-500 to-blue-500
-                                        hover:from-purple-600 hover:to-blue-600 text-white font-semibold text-lg
+                                        className={`w-full h-14 bg-gradient-to-r from-purple-800/50 to-blue-500/30
+                                        hover:from-purple-600/40 hover:to-blue-600/40 text-white font-semibold text-lg
                                         transition-all duration-300 transform-gpu hover:scale-[1.02] hover:shadow-lg
                                         hover:shadow-purple-500/25 rounded-lg relative overflow-hidden group
                                         disabled:opacity-70 disabled:cursor-not-allowed`}
