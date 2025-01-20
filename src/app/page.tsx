@@ -1,101 +1,210 @@
-import Image from "next/image";
+"use client"
+
+import FormComponent from "@/components/form"
+import { motion, useScroll, useTransform } from "framer-motion"
+import { useRef, useState } from "react"
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const containerRef = useRef<HTMLDivElement>(null)
+  const introRef = useRef<HTMLDivElement>(null)
+  const [isVideoHovered, setIsVideoHovered] = useState(false)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  })
+
+  const introScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.95])
+  const introOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
+
+  // Enhanced floating elements
+  const floatingElements = Array.from({ length: 3 }).map((_, i) => (
+    <motion.div
+      key={i}
+      className={`absolute w-64 h-64 bg-gradient-to-r
+        ${i === 0 ? 'from-purple-500/10 to-blue-500/10' :
+          i === 1 ? 'from-blue-500/10 to-purple-500/10' :
+            'from-purple-500/10 via-blue-500/10 to-purple-500/10'}
+        rounded-full blur-3xl`}
+      animate={{
+        x: [0, Math.random() * 100 - 50],
+        y: [0, Math.random() * 100 - 50],
+        scale: [1, 1.2, 1],
+        rotate: [0, 360],
+      }}
+      transition={{
+        duration: 20 + i * 5,
+        repeat: Infinity,
+        repeatType: "reverse",
+        ease: "linear",
+      }}
+      style={{
+        left: `${20 + i * 30}%`,
+        top: `${20 + i * 20}%`,
+      }}
+    />
+  ))
+
+  return (
+    <div ref={containerRef} className="relative bg-black overflow-hidden">
+      {/* Enhanced Background Effects */}
+      <div className="fixed inset-0 z-0">
+        {/* <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/20 via-black to-black" /> */}
+        <div className="absolute inset-0 bg-grid animate-grid-fade opacity-5" />
+        {floatingElements}
+      </div>
+
+      {/* Enhanced Hero Section */}
+      <motion.section
+        ref={introRef}
+        style={{ scale: introScale, opacity: introOpacity }}
+        className="min-h-screen flex flex-col items-center justify-center relative px-4"
+      >
+        {/* <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
+          <motion.div
+            animate={{
+              scale: [1, 1.2, 1],
+              rotate: [0, 360],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            className="w-[800px] h-[800px] rounded-full bg-gradient-to-r from-purple-500/5 to-blue-500/5 blur-3xl"
+          />
+        </div> */}
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          className="text-center relative z-10 mb-16"
+        >
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            className="w-40 h-40 mx-auto mb-8 relative"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+
+          </motion.div>
+
+          <motion.h1
+            className="text-6xl  font-bold tracking-tight"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+          >
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-blue-500 animate-gradient-xy">
+              Welcome to the Learner&apos;s Arc
+            </span>
+          </motion.h1>
+
+          <motion.p
+            className="mt-6 text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+          >
+            Join us in Making you extraordinary
+          </motion.p>
+        </motion.div>
+
+        {/* Enhanced Video Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="w-full max-w-5xl mx-auto relative z-10 px-4"
+          onHoverStart={() => setIsVideoHovered(true)}
+          onHoverEnd={() => setIsVideoHovered(false)}
+        >
+          <motion.div
+            className="relative rounded-2xl overflow-hidden shadow-2xl"
+            animate={{
+              boxShadow: isVideoHovered
+                ? "0 0 50px -12px rgba(124, 58, 237, 0.5)"
+                : "0 0 30px -12px rgba(0, 0, 0, 0.5)"
+            }}
+          >
+            {/* Premium Video Effects */}
+            <motion.div
+              className="absolute inset-0 z-0"
+              animate={{
+                background: isVideoHovered
+                  ? "radial-gradient(circle at center, rgba(124, 58, 237, 0.3) 0%, transparent 70%)"
+                  : "radial-gradient(circle at center, rgba(124, 58, 237, 0.1) 0%, transparent 70%)"
+              }}
+              transition={{ duration: 0.5 }}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+            <div className="aspect-video relative z-10 group">
+              <video
+                className="w-full h-full object-cover transform transition-all duration-700 scale-105"
+                autoPlay
+                loop
+                muted
+                playsInline
+                controls={isVideoHovered}
+              >
+                <source src="https://cloudinary-marketing-res.cloudinary.com/video/upload/f_auto,q_auto,w_900/v1691615364/smart_tagging_3-2.mp4" type="video/mp4" />
+              </video>
+
+              {/* Enhanced Video Overlay */}
+              <motion.div
+                className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-black/60 via-black/20 to-transparent"
+                animate={{
+                  opacity: isVideoHovered ? 0 : 1,
+                }}
+                transition={{ duration: 0.5 }}
+              >
+                <motion.div
+                  className="flex flex-col items-center"
+                  animate={{
+                    scale: isVideoHovered ? 0.8 : 1,
+                  }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <motion.div
+                    className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center mb-4 border border-white/20"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <motion.svg
+                      className="w-10 h-10 text-white"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      animate={{ scale: [1, 1.1, 1] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </motion.svg>
+                  </motion.div>
+                  <span className="text-white text-xl font-medium tracking-wide">
+                    Watch our story
+                  </span>
+                </motion.div>
+              </motion.div>
+            </div>
+
+            {/* Enhanced Border Effect */}
+            <motion.div
+              className="absolute -inset-[1px] rounded-2xl z-0"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: isVideoHovered ? 1 : 0,
+              }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl opacity-50 blur-sm animate-pulse-slow" />
+            </motion.div>
+          </motion.div>
+        </motion.div>
+      </motion.section>
+
+      {/* Enhanced Form Section */}
+      <section className="relative z-10">
+        <FormComponent />
+      </section>
     </div>
-  );
+  )
 }

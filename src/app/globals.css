@@ -2,20 +2,239 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --radius: 0.5rem;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    height: 100%;
+    background: black;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    overflow-x: hidden;
+    background: black;
+  }
+
+  /* Premium Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    background: #000;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #9333ea, #3b82f6);
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* Enhanced Animation Keyframes */
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 0%;
+  }
+
+  50% {
+    background-position: 100% 100%;
+  }
+
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px);
+  }
+
+  50% {
+    transform: translateY(-20px) translateX(10px);
+  }
+}
+
+@keyframes gradient-xy {
+  0% {
+    background-position: 0% 0%;
+    background-size: 400% 400%;
+  }
+
+  50% {
+    background-position: 100% 100%;
+    background-size: 200% 200%;
+  }
+
+  100% {
+    background-position: 0% 0%;
+    background-size: 400% 400%;
+  }
+}
+
+/* Premium Grid Background */
+.bg-grid {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  mask-image: radial-gradient(circle at center, black 40%, transparent 70%);
+}
+
+.animate-grid-fade {
+  animation: gridFade 15s linear infinite;
+}
+
+@keyframes gridFade {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.05;
+  }
+
+  50% {
+    transform: translateY(-20px) scale(1.1);
+    opacity: 0.1;
+  }
+
+  100% {
+    transform: translateY(-40px) scale(1);
+    opacity: 0.05;
+  }
+}
+
+/* Premium Gradient Effects */
+.animate-gradient-xy {
+  animation: gradient-xy 15s ease infinite;
+  background-size: 400% 400%;
+  background-image: linear-gradient(115deg,
+      rgba(147, 51, 234, 1),
+      rgba(59, 130, 246, 1),
+      rgba(236, 72, 153, 1),
+      rgba(147, 51, 234, 1));
+}
+
+/* Enhanced Input Fields */
+.form-input-premium {
+  @apply bg-black border-white/10 text-white placeholder:text-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 transform-gpu hover:border-purple-500/50 hover:shadow-lg hover:shadow-purple-500/10;
+}
+
+/* Premium Card Effects */
+.card-premium {
+  @apply relative overflow-hidden rounded-xl;
+  background: radial-gradient(circle at center,
+      rgba(0, 0, 0, 0.8) 0%,
+      rgba(0, 0, 0, 0.95) 100%);
+}
+
+.card-premium::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(115deg,
+      rgba(147, 51, 234, 0.5),
+      rgba(59, 130, 246, 0.5),
+      rgba(236, 72, 153, 0.5));
+  mask: linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Premium Button Effects */
+.button-premium {
+  @apply relative overflow-hidden transition-all duration-300 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-semibold transform-gpu hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25;
+}
+
+.button-premium::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg,
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0.2),
+      rgba(255, 255, 255, 0.1));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.button-premium:hover::before {
+  opacity: 1;
+}
+
+/* Text Gradient Animation */
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-blue-500 to-purple-500;
+  background-size: 200% 100%;
+  animation: textGradient 8s linear infinite;
+}
+
+@keyframes textGradient {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Shimmer Effects */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    left: 200%;
+  }
 }
